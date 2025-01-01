@@ -3,6 +3,9 @@
     node_bundler = "esbuild"
     publish="public"
 
+[functions]
+    included_files = ["public/**"]
+
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/server/:splat"
