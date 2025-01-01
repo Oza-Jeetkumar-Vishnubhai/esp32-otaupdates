@@ -30,6 +30,7 @@ app.get('/checkUpdates/:version', (req, res) => {
 
   // Read all files in the public folder
   fs.readdir(publicDir, (err, files) => {
+    console.log(files)
     if (err) {
       return res.status(500).json({ error: 'Error reading files from the public folder.' });
     }
