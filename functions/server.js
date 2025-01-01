@@ -25,7 +25,7 @@ app.get('/checkUpdates/:version', (req, res) => {
     return res.status(400).json({ error: 'Version is required in the request body.' });
   }
 
-  const publicDir = path.join(__dirname, 'public');
+  const publicDir = path.join(__dirname, '../public');
   console.log("publicDir : ",publicDir)
 
   // Read all files in the public folder
