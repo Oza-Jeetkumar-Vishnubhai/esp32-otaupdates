@@ -26,11 +26,12 @@ app.get('/checkUpdates/:version', (req, res) => {
   }
 
   const publicDir = path.join(__dirname, 'public');
-  console.log(publicDir)
+  console.log("publicDir : ",publicDir)
 
   // Read all files in the public folder
   fs.readdir(publicDir, (err, files) => {
-    console.log(files)
+    console.log("error : ",err)
+    console.log("files : ",files)
     if (err) {
       return res.status(500).json({ error: 'Error reading files from the public folder.' });
     }
