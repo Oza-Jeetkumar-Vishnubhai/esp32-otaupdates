@@ -1,7 +1,6 @@
 [build]
     functions = "functions"
     node_bundler = "esbuild"
-    publish = "public"
 
 [[redirects]]
   from = "/*"
