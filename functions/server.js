@@ -33,7 +33,7 @@ app.get('/checkUpdates/:version', (req, res) => {
     console.log("error : ",err)
     console.log("files : ",files)
     if (err) {
-      return res.status(500).json({ error: 'Error reading files from the public folder.' });
+      return res.status(500).json({ error:err,message: 'Error reading files from the public folder.' });
     }
 
     // Find a file that matches the version
