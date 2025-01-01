@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const fs = require('fs');
+const ServerlessHttp = require("serverless-http");
+
 
 const app = express();
 const PORT = 8000;
@@ -44,7 +46,14 @@ app.get('/checkUpdates/:version', (req, res) => {
   });
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// // Start the server
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+const handler = ServerlessHttp(app);
+
+module.exports.handler = async (event, context) => {
+  const result = await handler(event, context);
+  return result;
+};
