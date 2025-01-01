@@ -1,7 +1,7 @@
 [build]
     functions = "functions"
     node_bundler = "esbuild"
-    publish="publickajnckjsn"
+    publish="public"
 
 [functions]
     included_files = ["public/**"]
