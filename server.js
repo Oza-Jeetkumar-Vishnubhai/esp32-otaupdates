@@ -5,7 +5,7 @@ const { ref, getDownloadURL,listAll } = require("firebase/storage");
 const { storage } = require("./firebaseConfig.js");
 
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
 // Middleware to parse JSON body
 app.use(express.json());
