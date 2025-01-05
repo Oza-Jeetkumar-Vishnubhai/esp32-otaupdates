@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { ref, getDownloadURL } = require("firebase/storage");
+const { ref, getDownloadURL,listAll } = require("firebase/storage");
 const { storage } = require("./firebaseConfig.js");
 
 const app = express();
@@ -20,9 +20,16 @@ app.get("/checkUpdates/:version", async (req, res) => {
   const { version } = req.params;
   console.log(version);
   try {
-    const pathReference = ref(storage, "esp32Code/Final Code.txt");
-    const url = await getDownloadURL(pathReference);
+    const folderRef = ref(storage, "esp32Code/");
+    const files = await listAll(folderRef)
+    console.log(files)
+    const fileRef = files.items[0];
+    if(version==fileRef.name.split('.ino')[0]){
+      return res.status(200).json({ update:false,message: "No updates available." });
+    }
+    const url = await getDownloadURL(fileRef);
     console.log("url : ",url)
+    res.status(200).json({ message: "Update available.", firmwareUrl: url });
   } catch (error) {
     console.log(error)
   }
