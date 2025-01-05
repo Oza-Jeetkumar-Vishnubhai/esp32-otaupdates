@@ -1,9 +1,11 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const fs = require('fs');
-const ServerlessHttp = require("serverless-http");
-
+const express = require("express");
+const path = require("path");
+const cors = require("cors");
+const fs = require("fs");
+require("dotenv").config();
+const { ref, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../firebaseConfig.js");
+const stream = require('stream');
 
 const app = express();
 const PORT = 8000;
@@ -12,51 +14,30 @@ const PORT = 8000;
 app.use(express.json());
 app.use(cors());
 
-app.get("/",(req,res)=>{
-  res.status(200).json({es:0});
-})
-
-// Endpoint to check updates
-app.get('/checkUpdates/:version', (req, res) => {
-  const { version } = req.params;
-  console.log(version)
-
-  if (!version) {
-    return res.status(400).json({ error: 'Version is required in the request body.' });
-  }
-
-  const publicDir = path.join(__dirname, '../public');
-  console.log("publicDir : ",publicDir)
-
-  // Read all files in the public folder
-  fs.readdir(publicDir, (err, files) => {
-    console.log("error : ",err)
-    console.log("files : ",files)
-    if (err) {
-      return res.status(500).json({ error:err,message: 'Error reading files from the public folder.' });
-    }
-
-    // Find a file that matches the version
-    console.log(files)
-    if (files[0].split(".ino")[0]!==version) {
-      // Serve the matching file
-      res.setHeader('Content-Type', 'application/octet-stream');
-      res.status(200); 
-      res.sendFile(path.join(publicDir, files[0]));
-    } else {
-      res.status(200).json({update:false});
-    }
-  });
+app.get("/", (req, res) => {
+  res.status(200).json({ es: 0 });
 });
 
-// // Start the server
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
+// Endpoint to check updates
+app.get("/checkUpdates/:version", async (req, res) => {
+  const { version } = req.params;
+  console.log(version);
+  try {
+    const pathReference = ref(storage, "esp32Code/Final Code.txt");
+    const url = await getDownloadURL(pathReference);
+    console.log("url : ",url)
+  } catch (error) {
+    console.log(error)
+  }
 
-const handler = ServerlessHttp(app);
+  if (!version) {
+    return res
+      .status(400)
+      .json({ error: "Version is required in the request body." });
+  }
+});
 
-module.exports.handler = async (event, context) => {
-  const result = await handler(event, context);
-  return result;
-};
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
