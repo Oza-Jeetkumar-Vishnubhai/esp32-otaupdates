@@ -5,7 +5,7 @@ const { ref, getDownloadURL,listAll } = require("firebase/storage");
 const { storage } = require("./firebaseConfig.js");
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Middleware to parse JSON body
 app.use(express.json());
@@ -42,4 +42,8 @@ app.get("/checkUpdates/:version", async (req, res) => {
 });
 
 // Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+
 module.exports = app;
